@@ -18,7 +18,7 @@ module Jekyll
       posters = []
 
       imdb_ids.each do |imdb_id|
-        movie = TMDB.get_movie(site.config['tmdb_api_key'], imdb_id)
+        movie = TMDB.get_movie("f7c09b27485ed7f3371edb7c0e144535", imdb_id)
         posters << "<img src=\"#{TMDB.get_poster_url(movie, :small)}\" />"
       end
 
@@ -26,13 +26,12 @@ module Jekyll
     end
 
     def get_imdb_ids(url)
-      imdb_ids =
       doc = Nokogiri::HTML(open(url))
       movies = doc.css('li.listItemMovie')[0,@max]
 
       return [] unless movies
 
-      movies.collect { |movie| movie.css('.optionIMDB').first.attribute('href').value()[/tt[0-9]+/]}
+      movies.map { |movie| movie.css('.optionIMDB').first.attribute('href').value()[/tt[0-9]+/]}
     end
   end
   
@@ -53,7 +52,7 @@ module Jekyll
       JSON.parse(response.read)
     end
     
-    def self.get_url(movie, size = :normal)
+    def self.get_poster_url(movie, size = :normal)
       image = movie['images']['posters'][0]['file_path']
       
       "#{BASE_URL}#{POSTER_SIZES[size]}#{image}"
