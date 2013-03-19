@@ -20,6 +20,9 @@ class TestSimpleNumber < Test::Unit::TestCase
     BODY
     @tmdb_result = <<-TMDB
     {
+      "title": "title",
+      "release_date": "2010-02-21",
+      "overview": "It is a nice movie about stuff",
       "images": {
         "backdrops": [],
         "posters": [
@@ -39,10 +42,8 @@ class TestSimpleNumber < Test::Unit::TestCase
     tag = Jekyll::ICheckMoviesTag.new("my_movies", 3, [])
     result = tag.render(nil)
     
-    images = result.split('<br />')
+    images = result.scan('http://cf2.imgobject.com/t/p/w154/pYiAYDn3ltw9Fq7izODuq7oWYwX.jpg')
     
-    assert_equal 3, images.length, "There aren't enough parts found after splitting"
-    assert images.all? {|image| image.include? "http://cf2.imgobject.com/t/p/w154/pYiAYDn3ltw9Fq7izODuq7oWYwX.jpg"}
-
+    assert_equal 3, images.length, "There aren't occurances of the image found"
   end
 end

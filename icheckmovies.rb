@@ -15,14 +15,23 @@ module Jekyll
       url = 'http://www.icheckmovies.com/movies/checked/?user=maartenvg'
       imdb_ids = get_imdb_ids(url)
 
-      posters = []
+      params = {"movies" => []}
 
       imdb_ids.each do |imdb_id|
         movie = TMDB.get_movie("f7c09b27485ed7f3371edb7c0e144535", imdb_id)
-        posters << "<img src=\"#{TMDB.get_poster_url(movie, :small)}\" />"
+        if movie
+          poster_url = TMDB.get_poster_url(movie, :small)
+          params["movies"] << {
+                                "title" => movie["title"], 
+                                "year" => movie["release_date"][0,4], 
+                                "poster_url" => poster_url, 
+                                "description" => movie["overview"], 
+                                "imdb_url" => "http://www.imdb.com/title/#{imdb_id}"
+                              }
+        end
       end
 
-      posters.join("<br />\n")
+      html_output(params)
     end
 
     def get_imdb_ids(url)
@@ -32,6 +41,14 @@ module Jekyll
       return [] unless movies
 
       movies.map { |movie| movie.css('.optionIMDB').first.attribute('href').value()[/tt[0-9]+/]}
+    end
+    
+    def html_output(movies)
+      template = ""
+      File.open(File.expand_path "icheckmovies.html", File.dirname(__FILE__)) do |io|
+        template = io.read
+      end
+      Liquid::Template.parse(template).render(movies)
     end
   end
   
