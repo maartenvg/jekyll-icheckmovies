@@ -103,7 +103,8 @@ module Jekyll
 
       def get_movie_from_cache(imdb_id)
         file = cache_filename(imdb_id)
-        JSON.parse(open(file).read)
+        str = open(file).read
+        JSON.parse(str)
       end
 
       def put_movie_in_cache(imdb_id, data)
@@ -111,7 +112,7 @@ module Jekyll
 
         file = cache_filename(imdb_id)
 
-        File.open(file, 'w') { |f| f.write(data) }
+        File.open(file, 'w') { |f| f.write(JSON.generate(data)) }
       end
 
       def cache_filename(imdb_id)
