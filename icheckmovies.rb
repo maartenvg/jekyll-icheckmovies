@@ -9,7 +9,7 @@ module Jekyll
     attr_reader :params
 
     ALLOWED_PARAMS = {max: :int, username: :string, tmdb_api_key: :string, size: :symbol, cache: :bool}
-    CACHE_PATH = File.join(File.dirname(__FILE__), '.icheckmovie-cache/')
+    CACHE_PATH = File.expand_path(File.join(File.dirname(__FILE__), '.icheckmovie-cache/'))
 
 
     def initialize(tag_name, params, tokens)
@@ -111,7 +111,7 @@ module Jekyll
 
         file = cache_filename(imdb_id)
 
-        File.open(file, 'w') { |f| f.write(doc) }
+        File.open(file, 'w') { |f| f.write(data) }
       end
 
       def cache_filename(imdb_id)
