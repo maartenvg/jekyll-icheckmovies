@@ -4,6 +4,9 @@ GEM
     addressable (2.3.3)
     crack (0.3.2)
     liquid (2.5.0)
+    metaclass (0.0.1)
+    mocha (0.13.3)
+      metaclass (~> 0.0.1)
     nokogiri (1.5.9)
     rake (10.0.3)
     webmock (1.11.0)
@@ -15,6 +18,7 @@ PLATFORMS
 
 DEPENDENCIES
   liquid
+  mocha
   nokogiri
   rake
   webmock

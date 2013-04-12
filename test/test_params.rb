@@ -22,4 +22,16 @@ class TestParams < Test::Unit::TestCase
     assert_equal 4, tag.params[:max]
     assert_equal 'user', tag.params[:username]
   end
+  
+  def test_boolean_param_false
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "cache: false", {})
+    
+    assert_equal false, tag.params[:cache]
+  end
+  
+  def test_boolean_param_false
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "cache: true", {})
+    
+    assert_equal true, tag.params[:cache]
+  end
 end
