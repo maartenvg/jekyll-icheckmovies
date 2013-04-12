@@ -1,5 +1,9 @@
-<ul id="icheckmovies">
+<ul class="icheckmovies">
   {% for movie in movies %}
-	<li><a href="{{movie.imdb_url}}"><img src="{{movie.poster_url}}" /></a></li>	
+  <li>
+    <a href="{{movie.imdb_url}}" title="{{movie.tite}} ({{movie.year}})"><img src="{{movie.poster_url}}" alt="{{movie.tite}} ({{movie.year}})"/></a>
+    <br />
+    <span class="title">{{movie.title}}</span> <span class="year">({{movie.year}})</span>
+  </li>
   {% endfor %}
 </ul>

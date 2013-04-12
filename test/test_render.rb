@@ -44,6 +44,30 @@ class TestRender < Test::Unit::TestCase
     
     images = result.scan('http://cf2.imgobject.com/t/p/w154/pYiAYDn3ltw9Fq7izODuq7oWYwX.jpg')
     
-    assert_equal 3, images.length, "There aren't occurances of the image found"
+    assert_equal 3, images.length, "There aren't enough occurances of the image found"
+  end
+  
+  def test_full_render
+    stub_request(:any, /www.icheckmovies.com.*/).to_return(:body => @body)
+    stub_request(:any, /api.themoviedb.org.*/).to_return(:body => @tmdb_result)
+    
+    text = "{% my_movies max: 3, username: qwerty %}"
+    template = Liquid::Template.parse(text)
+    result = template.render
+    
+    images = result.scan('http://cf2.imgobject.com/t/p/w154/pYiAYDn3ltw9Fq7izODuq7oWYwX.jpg')
+    assert_equal 3, images.length, "There aren't enough occurances of the image found" 
+  end
+  
+  def test_full_render_with_one_argument
+    stub_request(:any, /www.icheckmovies.com.*/).to_return(:body => @body)
+    stub_request(:any, /api.themoviedb.org.*/).to_return(:body => @tmdb_result)
+    
+    text = "{% my_movies qwerty %}"
+    template = Liquid::Template.parse(text)
+    result = template.render
+    
+    images = result.scan('http://cf2.imgobject.com/t/p/w154/pYiAYDn3ltw9Fq7izODuq7oWYwX.jpg')
+    assert_equal 3, images.length, "There aren't enough occurances of the image found" 
   end
 end
