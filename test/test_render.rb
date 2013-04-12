@@ -39,7 +39,7 @@ class TestRender < Test::Unit::TestCase
     stub_request(:any, /www.icheckmovies.com.*/).to_return(:body => @body)
     stub_request(:any, /api.themoviedb.org.*/).to_return(:body => @tmdb_result)
     
-    tag = Jekyll::ICheckMoviesTag.new("my_movies", 3, [])
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "max: 3", [])
     result = tag.render(nil)
     
     images = result.scan('http://cf2.imgobject.com/t/p/w154/pYiAYDn3ltw9Fq7izODuq7oWYwX.jpg')

@@ -26,7 +26,7 @@ class TestImdbIds < Test::Unit::TestCase
   def test_get_movies
     stub_request(:any, 'www.example.com').to_return(:body => @body)
 
-    tag = Jekyll::ICheckMoviesTag.new("my_movies", 3, {})
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "max: 3", {})
     result = tag.get_imdb_ids('http://www.example.com')
 
     assert_equal(3, result.length)
@@ -38,7 +38,7 @@ class TestImdbIds < Test::Unit::TestCase
   def test_get_more_movies_than_available
     stub_request(:any, 'www.example.com').to_return(:body => @body)
 
-    tag = Jekyll::ICheckMoviesTag.new("my_movies", 5, {})
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "max: 5", {})
     result = tag.get_imdb_ids('http://www.example.com')
 
     assert_equal(4, result.length)
@@ -51,7 +51,7 @@ class TestImdbIds < Test::Unit::TestCase
   def test_get_zero_movies
     stub_request(:any, 'www.example.com').to_return(:body => @body)
 
-    tag = Jekyll::ICheckMoviesTag.new("my_movies", 0, {})
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "max: 0", {})
     result = tag.get_imdb_ids('http://www.example.com')
 
     assert_equal([], result)
@@ -60,7 +60,7 @@ class TestImdbIds < Test::Unit::TestCase
   def test_no_movies_available
     stub_request(:any, 'www.example.com').to_return(:body => "")
 
-    tag = Jekyll::ICheckMoviesTag.new("my_movies", 3, {})
+    tag = Jekyll::ICheckMoviesTag.new("my_movies", "max: 3", {})
     result = tag.get_imdb_ids('http://www.example.com')
 
     assert_equal([], result)

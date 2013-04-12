@@ -4,24 +4,62 @@ require 'date'
 require 'liquid'
 require 'json'
 
-module Jekyll
+module Jekyll  
   class ICheckMoviesTag < Liquid::Tag
-    def initialize(tag_name, max = 4, tokens)
+    attr_reader :params
+    
+    ALLOWED_PARAMS = {max: :int, username: :string, tmdb_api_key: :string, size: :symbol} 
+    
+    def initialize(tag_name, params, tokens)
       super
-      @max = max.to_i
+      
+      @params = {
+          max: 4, 
+          tmdb_api_key: 'f7c09b27485ed7f3371edb7c0e144535', 
+          size: :normal
+      }
+      
+      if params.include? ':'
+        parse_params(params)      
+      else
+        @params[:username] = params
+      end
     end
 
+    def parse_params(params)
+      params.split(',').each do |param|
+        var, value = param.split(':')
+        var = var.strip.to_sym
+        value.strip!
+        
+        unless ALLOWED_PARAMS[var]
+          raise ArgumentError.new "Illegal parameter #{var}"
+        end
+        
+        if ALLOWED_PARAMS[var] == :int
+          value = value.to_i
+        end
+        
+        if ALLOWED_PARAMS[var] == :symbol
+          value = value.to_sym
+        end
+        
+        @params[var] = value  
+      end
+    end
+ 
+
     def render(context)
-      url = 'http://www.icheckmovies.com/movies/checked/?user=maartenvg'
+      url = "http://www.icheckmovies.com/movies/checked/?user=#{@params[:username]}"
       imdb_ids = get_imdb_ids(url)
 
-      params = {"movies" => []}
+      output_params = {"movies" => []}
 
       imdb_ids.each do |imdb_id|
-        movie = TMDB.get_movie("f7c09b27485ed7f3371edb7c0e144535", imdb_id)
+        movie = TMDB.get_movie(@params[:tmdb_api_key], imdb_id)
         if movie
           poster_url = TMDB.get_poster_url(movie, :small)
-          params["movies"] << {
+          output_params["movies"] << {
                                 "title" => movie["title"], 
                                 "year" => movie["release_date"][0,4], 
                                 "poster_url" => poster_url, 
@@ -31,12 +69,12 @@ module Jekyll
         end
       end
 
-      html_output(params)
+      html_output(output_params)
     end
 
     def get_imdb_ids(url)
       doc = Nokogiri::HTML(open(url))
-      movies = doc.css('li.listItemMovie')[0,@max]
+      movies = doc.css('li.listItemMovie')[0, @params[:max]]
 
       return [] unless movies
 
