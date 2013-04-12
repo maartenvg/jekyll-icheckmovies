@@ -1,0 +1,20 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.3.3)
+    crack (0.3.2)
+    liquid (2.5.0)
+    nokogiri (1.5.9)
+    rake (10.0.3)
+    webmock (1.11.0)
+      addressable (>= 2.2.7)
+      crack (>= 0.3.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  liquid
+  nokogiri
+  rake
+  webmock

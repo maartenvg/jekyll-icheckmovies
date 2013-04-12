@@ -55,9 +55,9 @@ module Jekyll
   class TMDB
     POSTER_SIZES = {
       xsmall: "w92",
-      small: "w154",
+      small:  "w154",
       normal: "w185",
-      large: "w342",
+      large:  "w342",
       xlarge: "w500"
     }
     
@@ -65,7 +65,7 @@ module Jekyll
 
     def self.get_movie(api_key, id)
       headers  = { 'Accept' => "application/json" }
-      response = open("http://api.themoviedb.org/3/movie/#{id}?api_key=#{@api_key}&append_to_response=images", headers)
+      response = open("http://api.themoviedb.org/3/movie/#{id}?api_key=#{api_key}&append_to_response=images", headers)
       JSON.parse(response.read)
     end
     

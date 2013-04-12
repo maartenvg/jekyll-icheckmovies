@@ -1,9 +1,9 @@
-require "../icheckmovies"
+require "icheckmovies"
 require "test/unit"
 require 'webmock'
 
 include WebMock::API
-class TestSimpleNumber < Test::Unit::TestCase
+class TestRender < Test::Unit::TestCase
   def setup
     @body = <<-BODY
     <ul>
